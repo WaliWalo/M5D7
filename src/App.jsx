@@ -13,6 +13,7 @@ import horror from "./data/horror.json";
 import romance from "./data/romance.json";
 import scifi from "./data/scifi.json";
 import JumbotronComponent from "./components/JumbotronComponent";
+import { getBooks } from "./data/booksApi";
 let bookCategories = ["fantasy", "horror", "history", "romance", "scifi"];
 let books = {
   fantasy,
@@ -28,6 +29,7 @@ class App extends React.Component {
     this.state = {
       books: books.fantasy.slice(0, 12),
       category: "fantasy",
+      apiBooks: [],
     };
   }
   handleDropdownChange = (category) => {
@@ -35,6 +37,15 @@ class App extends React.Component {
       books: books[category].slice(0, 12),
       category: category,
     });
+  };
+
+  componentDidMount = () => {
+    this.fetchBooks();
+  };
+
+  fetchBooks = async () => {
+    let books = await getBooks();
+    this.setState({ apiBooks: books });
   };
   handleSearch = (query) => {
     let categorySelected = this.state.category;
