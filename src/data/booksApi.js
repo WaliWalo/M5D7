@@ -5,7 +5,7 @@ export async function getBooks() {
     let myHeaders = new Headers();
     myHeaders.append("Origin", url);
     let response = await fetch(`${url}/books`, {
-      method: "POST",
+      method: "GET",
       headers: myHeaders,
     });
     if (response.ok) {
