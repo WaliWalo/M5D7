@@ -53,7 +53,7 @@ class NavBar extends Component {
                   type="text"
                   placeholder={<FontAwesomeIcon icon={faSearch} />}
                   className="mr-sm-2"
-                  onChange={(e) => this.handleSearch(e.target.value)}
+                  onChange={(e) => this.props.handleSearch(e.target.value)}
                 />
               </Form>
             </Nav>

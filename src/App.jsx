@@ -13,6 +13,8 @@ import horror from "./data/horror.json";
 import romance from "./data/romance.json";
 import scifi from "./data/scifi.json";
 import JumbotronComponent from "./components/JumbotronComponent";
+import { getBooks } from "./data/booksApi";
+import { Spinner } from "react-bootstrap";
 let bookCategories = ["fantasy", "horror", "history", "romance", "scifi"];
 let books = {
   fantasy,
@@ -28,23 +30,38 @@ class App extends React.Component {
     this.state = {
       books: books.fantasy.slice(0, 12),
       category: "fantasy",
+      apiBooks: [],
+      loading: true,
     };
   }
-  handleDropdownChange = (category) => {
-    this.setState({
-      books: books[category].slice(0, 12),
-      category: category,
-    });
+  // handleDropdownChange = (category) => {
+  //   this.setState({
+  //     books: books[category].slice(0, 12),
+  //     category: category,
+  //   });
+  // };
+
+  componentDidMount = () => {
+    this.fetchBooks();
   };
+
+  fetchBooks = async () => {
+    let data = await getBooks();
+    this.setState({ apiBooks: data });
+    this.setState({ loading: false });
+  };
+
   handleSearch = (query) => {
     let categorySelected = this.state.category;
+    console.log(query);
     if (query) {
-      let filtered = books[categorySelected].filter((book) => {
+      let filtered = this.state.apiBooks.filter((book) => {
         return book.title.toLowerCase().includes(query.toLowerCase());
       });
-      this.setState({ books: filtered });
+      this.setState({ apiBooks: filtered });
     } else {
-      this.setState({ books: books[categorySelected].slice(0, 12) });
+      this.fetchBooks();
+      // this.setState({ apiBooks: books[categorySelected].slice(0, 12) });
     }
   };
 
@@ -52,13 +69,22 @@ class App extends React.Component {
     return (
       <>
         <Router>
-          <NavBar />
+          <NavBar handleSearch={this.handleSearch} />
           <JumbotronComponent />
-          <Route
-            path="/"
-            exact
-            render={(props) => <BookList books={this.state.books} {...props} />}
-          />
+          {!this.state.loading ? (
+            <Route
+              path="/"
+              exact
+              render={(props) => (
+                <BookList books={this.state.apiBooks} {...props} />
+              )}
+            />
+          ) : (
+            <Spinner animation="border" role="status">
+              <span className="sr-only">Loading...</span>
+            </Spinner>
+          )}
+
           <Route
             path="/registration"
             exact
