@@ -51,7 +51,7 @@ export default class ShowComment extends Component {
   removeComment = async (id) => {
     try {
       let response = await fetch(
-        `https://striveschool-api.herokuapp.com/api/comments/${id}`,
+        `https://strive-bookstore-be.herokuapp.com/books/${this.props.book.asin}/comments/${id}`,
         {
           method: "DELETE",
           headers: {
