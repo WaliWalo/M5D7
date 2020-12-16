@@ -54,10 +54,6 @@ export default class ShowComment extends Component {
         `https://strive-bookstore-be.herokuapp.com/books/${this.props.book.asin}/comments/${id}`,
         {
           method: "DELETE",
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmI2NzU3Yjk4MzViMDAwMTc1ODRlZjUiLCJpYXQiOjE2MDU3OTMxNDcsImV4cCI6MTYwNzAwMjc0N30.lxFe7Z-irNQnTdXgds1emn7EBt7CEXW_OSXlWyA-ypI",
-          },
         }
       );
       this.setState({ loading: false });
@@ -107,7 +103,7 @@ export default class ShowComment extends Component {
                   <p>Rating: {comment.rate}</p>
                   <Button
                     onClick={() => {
-                      this.removeComment(comment._id);
+                      this.removeComment(comment.id);
                     }}
                   >
                     Remove Comment
